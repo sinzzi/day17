@@ -1,0 +1,73 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ezen.batis.Service">
+<resultMap type="com.ezen.batis.MyScore_DTO" id="score1">
+	<result property="bun" column="bun"/>
+	<result property="kor" column="kor"/>
+	<result property="eng" column="eng"/>
+	<result property="mat" column="mat"/>
+</resultMap>
+
+<resultMap type="com.ezen.batis.Myinfo_DTO" id="hi">
+	<result property="bun" column="bun"/>
+	<result property="name" column="name"/>
+	<result property="age" column="age"/>
+	<result property="address" column="address"/>
+	<collection property="myScore_DTO" ofType="com.ezen.batis.MyScore_DTO" resultMap="score1" />
+</resultMap>
+
+
+<resultMap type="com.ezen.batis.ScoreDTO" id="score">
+	<result property="id" column="id"/>
+	<result property="kor" column="kor"/>
+	<result property="eng" column="eng"/>
+	<result property="mat" column="mat"/>
+	<result property="tot" column="tot"/>
+</resultMap>
+
+<resultMap type="com.ezen.batis.InsaDTO" id="insa">
+	<result property="id" column="id"/>
+	<result property="jik" column="jik"/>
+	<result property="fasu" column="fasu"/>
+	<result property="gisu" column="gisu"/>
+	<result property="hap" column="hap"/>
+</resultMap>
+
+<resultMap type="com.ezen.batis.MyinfoDTO" id="myinfo">
+	<result property="id" column="id"/>
+	<result property="name" column="name"/>
+	<result property="tel" column="tel"/>
+	<collection property="scoreDTO" ofType="com.ezen.batis.ScoreDTO" resultMap="score" />
+	<collection property="insaDTO" ofType="com.ezen.batis.InsaDTO" resultMap="insa" />
+</resultMap>
+
+<insert id="insert_a">
+	insert into myinfo0228 values(#{param1},#{param2},#{param3})
+</insert>
+
+<!-- 
+<select id="print" resultType="com.ezen.batis.Myinfo_DTO">
+	select * from myinfo0228
+</select>
+ -->
+ 
+ <select id="print" resultMap="hi">
+	select indto.bun, indto.name, indto.age, indto.address, scdto.kor, scdto.eng, scdto.mat
+	from myinfo0318 indto, score0318 scdto
+	where indto.bun = scdto.bun
+</select>
+ 
+<delete id="deletea">
+	delete from myinfo0228 where name = #{param1}
+</delete>
+
+ <select id="select_db" resultMap="myinfo">
+	select my.id, my.name, my.tel,
+    sc.kor + sc.eng + sc.mat as tot,
+    sa.jik, sa.fasu + sa.gisu as hap
+	from myinfo0319 my join score0319 sc on my.id = sc.id
+    join insa0319 sa on my.id = sa.id
+</select>
+</mapper>
